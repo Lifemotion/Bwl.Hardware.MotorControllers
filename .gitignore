@@ -9,3 +9,5 @@ output
 debug-mono
 release-mono
 *.userprefs
+Debug
+Release
