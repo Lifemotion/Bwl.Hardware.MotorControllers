@@ -20,6 +20,16 @@ void uart_init_withdivider_x2(unsigned char port, unsigned int ubrr)
 		UCSR0B = (1<<RXEN0)|(1<<TXEN0);
 		UCSR0C = (0<<USBS0)|(3<<UCSZ00);
 	}
+	#ifdef UDR1
+	if (port==1)
+	{
+		UBRR1H = (unsigned char)(ubrr>>8);
+		UBRR1L = (unsigned char)ubrr;
+		UCSR1A = (1<<U2X1);
+		UCSR1B = (1<<RXEN1)|(1<<TXEN1);
+		UCSR1C = (1<<USBS1)|(3<<UCSZ10);
+	}
+	#endif	
 }
 
 void uart_init_withdivider(unsigned char port, unsigned int ubrr)

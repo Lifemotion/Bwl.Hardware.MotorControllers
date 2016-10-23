@@ -17,7 +17,7 @@ unsigned char uart_get(const unsigned char port );
 unsigned char uart_received(const unsigned char port );
 void uart_send_string(unsigned char port,char *string);
 void uart_send_value(unsigned char port,char* caption, int parameter);
-void uart_disable(unsigned char port);
+void	uart_disable(unsigned char port);
 
 void uart_send_line(unsigned char port,char *string);
 void uart_send_int(unsigned char port,int val);
