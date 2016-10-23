@@ -79,6 +79,7 @@ Partial Class MotorControllerTest
         Me.mc2servo7.SmallChange = 5
         Me.mc2servo7.TabIndex = 9
         Me.mc2servo7.TickFrequency = 5
+        Me.mc2servo7.Value = 50
         '
         'mc2servo6
         '
@@ -89,6 +90,7 @@ Partial Class MotorControllerTest
         Me.mc2servo6.SmallChange = 5
         Me.mc2servo6.TabIndex = 8
         Me.mc2servo6.TickFrequency = 5
+        Me.mc2servo6.Value = 50
         '
         'mc2servo5
         '
@@ -99,6 +101,7 @@ Partial Class MotorControllerTest
         Me.mc2servo5.SmallChange = 5
         Me.mc2servo5.TabIndex = 7
         Me.mc2servo5.TickFrequency = 5
+        Me.mc2servo5.Value = 50
         '
         'mc2servo4
         '
@@ -109,6 +112,7 @@ Partial Class MotorControllerTest
         Me.mc2servo4.SmallChange = 5
         Me.mc2servo4.TabIndex = 6
         Me.mc2servo4.TickFrequency = 5
+        Me.mc2servo4.Value = 50
         '
         'mc2servo3
         '
@@ -119,6 +123,7 @@ Partial Class MotorControllerTest
         Me.mc2servo3.SmallChange = 5
         Me.mc2servo3.TabIndex = 5
         Me.mc2servo3.TickFrequency = 5
+        Me.mc2servo3.Value = 50
         '
         'mc2servo2
         '
@@ -129,6 +134,7 @@ Partial Class MotorControllerTest
         Me.mc2servo2.SmallChange = 5
         Me.mc2servo2.TabIndex = 4
         Me.mc2servo2.TickFrequency = 5
+        Me.mc2servo2.Value = 50
         '
         'mc2servo1
         '
@@ -139,6 +145,7 @@ Partial Class MotorControllerTest
         Me.mc2servo1.SmallChange = 5
         Me.mc2servo1.TabIndex = 3
         Me.mc2servo1.TickFrequency = 5
+        Me.mc2servo1.Value = 50
         '
         'mc2servo0
         '
@@ -149,6 +156,7 @@ Partial Class MotorControllerTest
         Me.mc2servo0.SmallChange = 5
         Me.mc2servo0.TabIndex = 2
         Me.mc2servo0.TickFrequency = 5
+        Me.mc2servo0.Value = 50
         '
         'mc2motor
         '

@@ -1,8 +1,9 @@
-#define F_CPU 8000000UL
+#define F_CPU 16000000UL
 #define BAUD 9600
 #define DEV_NAME "BwlMtrCntTwo-1.0"
 #include "libs/bwl_uart.h"
 #include "libs/bwl_simplserial.h"
+#include "pwm.h"
 
 #include <avr/io.h>
 #include <avr/wdt.h>
@@ -10,11 +11,23 @@
 #include <util/setbaud.h>
 #include <stdlib.h>
 #include <string.h>
+#include <avr/interrupt.h>
 
 #define getbit(port, bit)		((port) &   (1 << (bit)))
 #define setbit(port,bit,val)	{if ((val)) {(port)|= (1 << (bit));} else {(port) &= ~(1 << (bit));}}
 
-#include "pwm.h"
+void timer1_set(double timerFreq, double freqMHz, byte enable_interrupt)
+{
+	unsigned int divider=(unsigned int)(1000000.0*freqMHz/timerFreq);
+	TCCR1A=(0<<COM1A1)|(0<<COM1A0)|(0<<COM1B1)|(0<<COM1B0)|(0<<WGM11)|(0<<WGM10);
+	TCCR1B=(0<<WGM13)|(1<<WGM12)|(0<<CS12)|(0<<CS11)|(1<<CS10);
+	OCR1AH=divider>>8;
+	OCR1AL=divider&255;
+	if (enable_interrupt)	
+	{
+		TIMSK1=(1<<OCIE1A);
+	}
+}
 
 void var_delay_ms(int ms)
 {
@@ -78,7 +91,6 @@ void servo_set_out(byte channel, byte state)
 	}
 }
 
-
 void pwm_set_out(byte channel, byte state)
 {
 	setbit(DDRD,5,1);setbit(PORTD,5,1);
@@ -91,6 +103,12 @@ void pwm_set_out(byte channel, byte state)
 	}
 }
 
+ISR(TIMER1_COMPA_vect)
+{
+	servo();
+	pwm();
+	//PORTB=255;DDRB=255;_delay_us(10);PORTB=0;
+}
 
 int main(void)
 {
@@ -99,19 +117,14 @@ int main(void)
 	sserial_set_devname(DEV_NAME);
 	sserial_append_devname(15,12,__DATE__);
 	sserial_append_devname(27,8,__TIME__);
-	
 	uart_init_withdivider(0,UBRR_VALUE);
 	uart_init_withdivider(1,UBRR_VALUE);
-	
-	//servo_set(0,100);
-	
+	timer1_set(20000,16.0,1);
+	sei();
     while (1) 
     {
-		pwm();
-		servo();
 		sserial_poll_uart(0);
 		wdt_reset();
-	//	sserial_poll_uart(1);
     }
 }
 
