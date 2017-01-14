@@ -15,10 +15,13 @@
 
 #define getbit(port, bit)		((port) &   (1 << (bit)))
 #define setbit(port,bit,val)	{if ((val)) {(port)|= (1 << (bit));} else {(port) &= ~(1 << (bit));}}
+	
+long time_to_stop=0;
+#define TIME_TO_STOP 1
 
-void timer1_set(double timerFreq, double freqMHz, byte enable_interrupt)
+void timer1_set(double timerMksec, double freqMHz, byte enable_interrupt)
 {
-	unsigned int divider=(unsigned int)(1000000.0*freqMHz/timerFreq);
+	unsigned int divider=(unsigned int)(1000000.0*freqMHz/timerMksec);
 	TCCR1A=(0<<COM1A1)|(0<<COM1A0)|(0<<COM1B1)|(0<<COM1B0)|(0<<WGM11)|(0<<WGM10);
 	TCCR1B=(0<<WGM13)|(1<<WGM12)|(0<<CS12)|(0<<CS11)|(1<<CS10);
 	OCR1AH=divider>>8;
@@ -72,6 +75,7 @@ void sserial_process_request(unsigned char portindex)
 			if (type==10){pwm_set(channel,value);}
 			if (type==20){servo_set(channel,value);}
 		}
+		time_to_stop=TIME_TO_STOP*20000;
 	}
 }
 
@@ -91,6 +95,8 @@ void servo_set_out(byte channel, byte state)
 	}
 }
 
+
+
 void pwm_set_out(byte channel, byte state)
 {
 	setbit(DDRD,5,1);setbit(PORTD,5,1);
@@ -105,10 +111,14 @@ void pwm_set_out(byte channel, byte state)
 
 ISR(TIMER1_COMPA_vect)
 {
-	servo();
-	pwm();
-	//PORTB=255;DDRB=255;_delay_us(10);PORTB=0;
+	if (time_to_stop>0)
+	{
+		time_to_stop--;
+		servo();
+		pwm();	
+	}
 }
+
 
 int main(void)
 {

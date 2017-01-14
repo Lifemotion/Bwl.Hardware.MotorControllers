@@ -1,7 +1,7 @@
 #ifndef PWM_H_
 #define PWM_H_
 
-#define PWM_CHANNELS 2
+#define PWM_CHANNELS 8
 #define PWM_TOP 50
 
 #define SERVO_CHANNELS 8
