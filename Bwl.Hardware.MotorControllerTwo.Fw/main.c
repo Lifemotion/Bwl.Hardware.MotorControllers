@@ -134,6 +134,7 @@ int main(void)
     while (1) 
     {
 		sserial_poll_uart(0);
+		sserial_poll_uart(1);
 		wdt_reset();
     }
 }
