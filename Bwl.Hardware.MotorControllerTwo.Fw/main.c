@@ -32,6 +32,16 @@ void timer1_set(double timerMksec, double freqMHz, byte enable_interrupt)
 	}
 }
 
+ISR(TIMER1_COMPA_vect)
+{
+	if (time_to_stop>0)
+	{
+		time_to_stop--;
+		servo();
+		pwm();
+	}
+}
+
 void var_delay_ms(int ms)
 {
 	for (int i=0; i<ms; i++)_delay_ms(1.0);
@@ -109,15 +119,7 @@ void pwm_set_out(byte channel, byte state)
 	}
 }
 
-ISR(TIMER1_COMPA_vect)
-{
-	if (time_to_stop>0)
-	{
-		time_to_stop--;
-		servo();
-		pwm();	
-	}
-}
+
 
 
 int main(void)
