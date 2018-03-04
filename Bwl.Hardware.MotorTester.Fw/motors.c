@@ -27,6 +27,7 @@ void motor_step(char dir)
 
 void servo_set_out(byte channel, byte state)
 {
+	//pin_set_dir(SERVO_PWM, 1);
 	switch(channel)
 	{
 		case 0:	 pin_set_out(SERVO_PWM, state); break;																																																																																																						

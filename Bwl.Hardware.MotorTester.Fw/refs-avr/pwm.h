@@ -7,8 +7,8 @@
 #define SERVO_CHANNELS 1
 #define SERVO_TOP	 400
 
-#define SERVO_START	 SERVO_TOP*0.050
-#define SERVO_END	 SERVO_TOP*0.100
+#define SERVO_START	 SERVO_TOP*0.030
+#define SERVO_END	 SERVO_TOP*0.130
 
 typedef unsigned char byte;
 

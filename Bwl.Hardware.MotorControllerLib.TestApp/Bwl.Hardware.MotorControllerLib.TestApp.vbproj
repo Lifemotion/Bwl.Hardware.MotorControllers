@@ -115,9 +115,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bwl.Hardware.MotorController\Bwl.Hardware.MotorController.vbproj">
+    <ProjectReference Include="..\Bwl.Hardware.MotorControllerLib\Bwl.Hardware.MotorControllerLib.vbproj">
       <Project>{a9d8ac9b-0fdf-4128-8cf9-ac5028e6d03b}</Project>
-      <Name>Bwl.Hardware.MotorController</Name>
+      <Name>Bwl.Hardware.MotorControllerLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
