@@ -2,10 +2,11 @@
 
 Public Class MotorControllerTest
     Inherits FormAppBase
-    Private _mc2 As New MotorControllerTwo
+    Private _mc2 As MotorControllerTwo
     Private _mc4 As New MotorControllerFour
 
     Private Sub mc2set_Tick(sender As Object, e As EventArgs) Handles mc2set.Tick
+        If _mc2 Is Nothing Then Return
         mc2state.Text = _mc2.BoardState.ToString + ", " + _mc2.BoardInfo
         If _mc2.IsConnected Then
             _mc2.BigMotor0 = mc2motor.Value
@@ -44,6 +45,16 @@ Public Class MotorControllerTest
             _mc4.Servo3 = mc4servo3.Value
             _mc4.Servo4 = mc4servo4.Value
             _mc4.SendValues()
+        End If
+    End Sub
+
+    Private Sub mc4info_Tick(sender As Object, e As EventArgs) Handles mc4info.Tick
+        If _mc4.IsConnected Then
+            Try
+                Dim info = _mc4.GetPowerInfo
+                mc4power.Text = info.ToString
+            Catch ex As Exception
+            End Try
         End If
     End Sub
 End Class

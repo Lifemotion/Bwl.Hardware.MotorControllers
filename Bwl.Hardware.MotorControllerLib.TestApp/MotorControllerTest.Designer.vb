@@ -71,6 +71,8 @@ Partial Class MotorControllerTest
         Me.mc4servo1 = New System.Windows.Forms.TrackBar()
         Me.mc4pwmAB = New System.Windows.Forms.TrackBar()
         Me.mc4state = New System.Windows.Forms.TextBox()
+        Me.mc4info = New System.Windows.Forms.Timer(Me.components)
+        Me.mc4power = New System.Windows.Forms.TextBox()
         Me.gbMC2.SuspendLayout()
         CType(Me.mc2motor3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.mc2motor2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -413,6 +415,7 @@ Partial Class MotorControllerTest
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.mc4power)
         Me.GroupBox1.Controls.Add(Me.mc4ch5)
         Me.GroupBox1.Controls.Add(Me.mc4ch4)
         Me.GroupBox1.Controls.Add(Me.mc4ch3)
@@ -517,7 +520,7 @@ Partial Class MotorControllerTest
         'Label22
         '
         Me.Label22.AutoSize = True
-        Me.Label22.Location = New System.Drawing.Point(6, 341)
+        Me.Label22.Location = New System.Drawing.Point(172, 251)
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(41, 13)
         Me.Label22.TabIndex = 14
@@ -526,7 +529,7 @@ Partial Class MotorControllerTest
         'Label23
         '
         Me.Label23.AutoSize = True
-        Me.Label23.Location = New System.Drawing.Point(6, 299)
+        Me.Label23.Location = New System.Drawing.Point(172, 209)
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(41, 13)
         Me.Label23.TabIndex = 13
@@ -561,7 +564,7 @@ Partial Class MotorControllerTest
         '
         'mc4servo4
         '
-        Me.mc4servo4.Location = New System.Drawing.Point(48, 341)
+        Me.mc4servo4.Location = New System.Drawing.Point(214, 251)
         Me.mc4servo4.Maximum = 100
         Me.mc4servo4.Name = "mc4servo4"
         Me.mc4servo4.Size = New System.Drawing.Size(104, 45)
@@ -572,7 +575,7 @@ Partial Class MotorControllerTest
         '
         'mc4servo3
         '
-        Me.mc4servo3.Location = New System.Drawing.Point(48, 296)
+        Me.mc4servo3.Location = New System.Drawing.Point(214, 206)
         Me.mc4servo3.Maximum = 100
         Me.mc4servo3.Name = "mc4servo3"
         Me.mc4servo3.Size = New System.Drawing.Size(104, 45)
@@ -621,6 +624,18 @@ Partial Class MotorControllerTest
         Me.mc4state.Name = "mc4state"
         Me.mc4state.Size = New System.Drawing.Size(334, 20)
         Me.mc4state.TabIndex = 0
+        '
+        'mc4info
+        '
+        Me.mc4info.Enabled = True
+        Me.mc4info.Interval = 550
+        '
+        'mc4power
+        '
+        Me.mc4power.Location = New System.Drawing.Point(9, 302)
+        Me.mc4power.Name = "mc4power"
+        Me.mc4power.Size = New System.Drawing.Size(309, 20)
+        Me.mc4power.TabIndex = 22
         '
         'MotorControllerTest
         '
@@ -712,4 +727,6 @@ Partial Class MotorControllerTest
     Friend WithEvents mc4servo1 As TrackBar
     Friend WithEvents mc4pwmAB As TrackBar
     Friend WithEvents mc4state As TextBox
+    Friend WithEvents mc4power As TextBox
+    Friend WithEvents mc4info As Timer
 End Class

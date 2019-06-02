@@ -1,5 +1,13 @@
 ﻿Public Class MotorControllerFour
     Inherits MotorController
+    Public Class PowerInfo
+        Public Property Voltage As Single
+        Public Property Current As Single
+        Public Overrides Function ToString() As String
+            Return "V = " + Voltage.ToString("0.0") + ", I = " + Current.ToString("0.00")
+        End Function
+    End Class
+
 
     Public Property MotorAB As Integer = 0
     Public Property MotorCD As Integer = 0
@@ -10,7 +18,6 @@
     Public Property Servo3 As Integer = 50
     Public Property Servo4 As Integer = 50
 
-
     Public Sub New()
         SimplSerialNameToFind = "BwlMtrCntFour"
     End Sub
@@ -19,6 +26,19 @@
         If val < 0 Then val = 0
         If val > 100 Then val = 100
         Return val
+    End Function
+
+    Public Function GetPowerInfo() As PowerInfo
+        Dim response = SS.Request(0, 88, {0})
+        If response.ResponseState = SimplSerial.ResponseState.ok Then
+            Dim result As New PowerInfo
+            result.Voltage = (CInt(response.Data(0)) * 256 + CInt(response.Data(1))) / 1000.0
+            result.Current = (CInt(response.Data(2)) * 256 + CInt(response.Data(3))) / 1000.0
+            Return result
+        Else
+            Throw New Exception(response.ToString)
+        End If
+
     End Function
 
     Public Sub SendValues()

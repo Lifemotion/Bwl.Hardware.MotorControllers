@@ -1,9 +1,11 @@
 #define F_CPU 12000000UL
 #define BAUD 9600
 #define DEV_NAME "BwlMtrCntFour-1.0"
+#include "libs/bwl_adc.h"
 #include "libs/bwl_uart.h"
 #include "libs/bwl_simplserial.h"
 #include "pwm.h"
+#define ADC_DEFAULTS ADC_ADJUST_RIGHT, ADC_REFS_INTERNAL_2_56, ADC_PRESCALER_128
 
 #include <avr/io.h>
 #include <avr/wdt.h>
@@ -67,6 +69,20 @@ void sserial_process_request(unsigned char portindex)
 			if (type==30){select_pwm_driver(channel);}
 		}
 		time_to_stop=TIME_TO_STOP*20000;
+	}
+	if (sserial_request.command==88)
+	{
+		adc_init(ADC_MUX_ADC7,ADC_DEFAULTS);
+		int voltage_adc=adc_read_average(4)*27.1;
+		adc_init(ADC_MUX_ADC6,ADC_DEFAULTS);
+		int current_adc=adc_read_average(32)*2.4;		
+		sserial_response.result=sserial_request.command+128;
+		sserial_response.data[0]=voltage_adc>>8;
+		sserial_response.data[1]=voltage_adc&0xFF;
+		sserial_response.data[2]=current_adc>>8;
+		sserial_response.data[3]=current_adc&0xFF;		
+		sserial_response.datalength=4;
+		sserial_send_response();
 	}
 }
 

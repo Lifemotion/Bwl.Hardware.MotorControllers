@@ -407,3 +407,19 @@ void sserial_poll_uart(unsigned char portindex)
 	}
 	
 }
+
+unsigned char int_to_low_byte(int val)
+{
+	if (val>32767){val=32767;}
+	if (val<-32768){val=-32768;}
+	uint16_t uval=(uint16_t)(val + 32768);
+	return (uval&0xFF);
+}
+
+unsigned char int_to_high_byte(int val)
+{
+	if (val>32767){val=32767;}
+	if (val<-32768){val=-32768;}
+	uint16_t uval=(uint16_t)(val + 32768);
+	return (uval>>8);
+}

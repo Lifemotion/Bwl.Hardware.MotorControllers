@@ -56,7 +56,11 @@ void sserial_append_devname(byte startIndex, byte length, char* newname);
 void sserial_set_devname(const char* devname);
 char sserial_send_request_wait_response(unsigned char portindex, int wait_ms );
 
+unsigned char int_to_low_byte(int val);
+unsigned char int_to_high_byte(int val);
 #endif /* BWL_GAPUART_H_ */
+
+
 
 #include "bwl_simplserial_ext.h"
 
