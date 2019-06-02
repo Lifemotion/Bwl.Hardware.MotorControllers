@@ -63,6 +63,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MotorControllerFour.vb" />
     <Compile Include="MotorControllerTwo.vb" />
     <Compile Include="MotorController.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
