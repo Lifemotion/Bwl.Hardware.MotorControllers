@@ -1,6 +1,6 @@
 #define F_CPU 12000000UL
 #define BAUD 9600
-#define DEV_NAME "BwlMtrCntFour-1.0"
+#define DEV_NAME "BwlMtrCntFour-1.1"
 #include "libs/bwl_adc.h"
 #include "libs/bwl_uart.h"
 #include "libs/bwl_simplserial.h"
@@ -41,6 +41,16 @@ ISR(TIMER1_COMPA_vect)
 		time_to_stop--;
 		servo();
 		pwm();
+		if (time_to_stop==0)
+		{
+				for (byte i=0; i<255; i++)
+				{
+					pwm_set_out(i,0);
+					servo_set_out(i,0);
+					pwm_set(i,0);
+					servo_set(i,0);
+				}
+		}
 	}
 }
 
@@ -75,13 +85,25 @@ void sserial_process_request(unsigned char portindex)
 		adc_init(ADC_MUX_ADC7,ADC_DEFAULTS);
 		int voltage_adc=adc_read_average(4)*27.1;
 		adc_init(ADC_MUX_ADC6,ADC_DEFAULTS);
-		int current_adc=adc_read_average(32)*2.4;		
+		int current_adc=adc_read_average(32)*2.4;
 		sserial_response.result=sserial_request.command+128;
 		sserial_response.data[0]=voltage_adc>>8;
 		sserial_response.data[1]=voltage_adc&0xFF;
 		sserial_response.data[2]=current_adc>>8;
 		sserial_response.data[3]=current_adc&0xFF;		
 		sserial_response.datalength=4;
+		sserial_send_response();
+	}
+	if (sserial_request.command==99)
+	{
+		byte adc_chan=sserial_request.data[0];
+		byte adc_avg=sserial_request.data[0];
+		adc_init(adc_chan,ADC_DEFAULTS);
+		int val=adc_read_average(adc_avg)*2.4;
+		sserial_response.result=sserial_request.command+128;
+		sserial_response.data[0]=val>>8;
+		sserial_response.data[1]=val&0xFF;
+		sserial_response.datalength=2;
 		sserial_send_response();
 	}
 }

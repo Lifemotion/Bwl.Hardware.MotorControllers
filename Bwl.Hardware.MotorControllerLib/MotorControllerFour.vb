@@ -38,7 +38,16 @@
         Else
             Throw New Exception(response.ToString)
         End If
+    End Function
 
+    Public Function GetADCVoltage(channel As Integer, average As Integer) As Single
+        Dim response = SS.Request(0, 99, {CByte(channel), CByte(average)})
+        If response.ResponseState = SimplSerial.ResponseState.ok Then
+            Dim result = (CInt(response.Data(0)) * 256 + CInt(response.Data(1))) / 1000.0
+            Return result
+        Else
+            Throw New Exception(response.ToString)
+        End If
     End Function
 
     Public Sub SendValues()

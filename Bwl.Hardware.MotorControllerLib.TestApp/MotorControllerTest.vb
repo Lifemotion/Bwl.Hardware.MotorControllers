@@ -57,4 +57,14 @@ Public Class MotorControllerTest
             End Try
         End If
     End Sub
+
+    Private Sub mc4adcGet_Click(sender As Object, e As EventArgs) Handles mc4adcGet.Click
+        Try
+            mc4adcResult.Text = ""
+            Dim result = _mc4.GetADCVoltage(Val(mc4adcChan.Text), Val(mc4adcAvg.Text))
+            mc4adcResult.Text = result.ToString("0.000")
+        Catch ex As Exception
+            _logger.AddError(ex.Message)
+        End Try
+    End Sub
 End Class

@@ -53,6 +53,7 @@ Partial Class MotorControllerTest
         Me.mc2set = New System.Windows.Forms.Timer(Me.components)
         Me.mc4set = New System.Windows.Forms.Timer(Me.components)
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.mc4power = New System.Windows.Forms.TextBox()
         Me.mc4ch5 = New System.Windows.Forms.RadioButton()
         Me.mc4ch4 = New System.Windows.Forms.RadioButton()
         Me.mc4ch3 = New System.Windows.Forms.RadioButton()
@@ -72,7 +73,12 @@ Partial Class MotorControllerTest
         Me.mc4pwmAB = New System.Windows.Forms.TrackBar()
         Me.mc4state = New System.Windows.Forms.TextBox()
         Me.mc4info = New System.Windows.Forms.Timer(Me.components)
-        Me.mc4power = New System.Windows.Forms.TextBox()
+        Me.mc4adcChan = New System.Windows.Forms.TextBox()
+        Me.mc4adcAvg = New System.Windows.Forms.TextBox()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.mc4adcGet = New System.Windows.Forms.Button()
+        Me.mc4adcResult = New System.Windows.Forms.TextBox()
         Me.gbMC2.SuspendLayout()
         CType(Me.mc2motor3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.mc2motor2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -415,6 +421,12 @@ Partial Class MotorControllerTest
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.mc4adcResult)
+        Me.GroupBox1.Controls.Add(Me.mc4adcGet)
+        Me.GroupBox1.Controls.Add(Me.Label16)
+        Me.GroupBox1.Controls.Add(Me.Label15)
+        Me.GroupBox1.Controls.Add(Me.mc4adcAvg)
+        Me.GroupBox1.Controls.Add(Me.mc4adcChan)
         Me.GroupBox1.Controls.Add(Me.mc4power)
         Me.GroupBox1.Controls.Add(Me.mc4ch5)
         Me.GroupBox1.Controls.Add(Me.mc4ch4)
@@ -440,6 +452,13 @@ Partial Class MotorControllerTest
         Me.GroupBox1.TabIndex = 27
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "MotorControllerFour"
+        '
+        'mc4power
+        '
+        Me.mc4power.Location = New System.Drawing.Point(9, 302)
+        Me.mc4power.Name = "mc4power"
+        Me.mc4power.Size = New System.Drawing.Size(331, 20)
+        Me.mc4power.TabIndex = 22
         '
         'mc4ch5
         '
@@ -630,12 +649,55 @@ Partial Class MotorControllerTest
         Me.mc4info.Enabled = True
         Me.mc4info.Interval = 550
         '
-        'mc4power
+        'mc4adcChan
         '
-        Me.mc4power.Location = New System.Drawing.Point(9, 302)
-        Me.mc4power.Name = "mc4power"
-        Me.mc4power.Size = New System.Drawing.Size(309, 20)
-        Me.mc4power.TabIndex = 22
+        Me.mc4adcChan.Location = New System.Drawing.Point(57, 339)
+        Me.mc4adcChan.Name = "mc4adcChan"
+        Me.mc4adcChan.Size = New System.Drawing.Size(34, 20)
+        Me.mc4adcChan.TabIndex = 23
+        Me.mc4adcChan.Text = "1"
+        '
+        'mc4adcAvg
+        '
+        Me.mc4adcAvg.Location = New System.Drawing.Point(154, 339)
+        Me.mc4adcAvg.Name = "mc4adcAvg"
+        Me.mc4adcAvg.Size = New System.Drawing.Size(32, 20)
+        Me.mc4adcAvg.TabIndex = 24
+        Me.mc4adcAvg.Text = "4"
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(6, 342)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(46, 13)
+        Me.Label15.TabIndex = 25
+        Me.Label15.Text = "Channel"
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(97, 342)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(47, 13)
+        Me.Label16.TabIndex = 26
+        Me.Label16.Text = "Average"
+        '
+        'mc4adcGet
+        '
+        Me.mc4adcGet.Location = New System.Drawing.Point(192, 339)
+        Me.mc4adcGet.Name = "mc4adcGet"
+        Me.mc4adcGet.Size = New System.Drawing.Size(75, 20)
+        Me.mc4adcGet.TabIndex = 27
+        Me.mc4adcGet.Text = "Get ADC"
+        Me.mc4adcGet.UseVisualStyleBackColor = True
+        '
+        'mc4adcResult
+        '
+        Me.mc4adcResult.Location = New System.Drawing.Point(273, 339)
+        Me.mc4adcResult.Name = "mc4adcResult"
+        Me.mc4adcResult.Size = New System.Drawing.Size(67, 20)
+        Me.mc4adcResult.TabIndex = 28
         '
         'MotorControllerTest
         '
@@ -729,4 +791,10 @@ Partial Class MotorControllerTest
     Friend WithEvents mc4state As TextBox
     Friend WithEvents mc4power As TextBox
     Friend WithEvents mc4info As Timer
+    Friend WithEvents mc4adcResult As TextBox
+    Friend WithEvents mc4adcGet As Button
+    Friend WithEvents Label16 As Label
+    Friend WithEvents Label15 As Label
+    Friend WithEvents mc4adcAvg As TextBox
+    Friend WithEvents mc4adcChan As TextBox
 End Class
