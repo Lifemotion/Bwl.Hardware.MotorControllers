@@ -1,11 +1,12 @@
 /*
- * Bwl SimplSerial Lib
- *
- * Author: Igor Koshelev 
- * Licensed: open-source Apache license
- *
- * Version: 01.05.2016 V1.5.0
- */ 
+* Bwl SimplSerial Lib
+*
+* Author: Igor Koshelev
+* Licensed: open-source Apache license
+*
+* Version: 25.10.2018 V1.7.1
+*/
+
 #ifndef BWL_GAPUART_H_
 #define BWL_GAPUART_H_
 
@@ -21,8 +22,8 @@ byte sserial_bootloader_present;
 byte sserial_portindex;
 uint16_t sserial_address;
 
-#define SSERIAL_VERSION "V1.5.0"
-#define CATUART_MAX_PACKET_LENGTH 128
+#define CATUART_MAX_PACKET_LENGTH 96
+#define SSERIAL_VERSION "V1.7.1"
 
 struct
 {
@@ -55,12 +56,14 @@ void sserial_find_bootloader();
 void sserial_append_devname(byte startIndex, byte length, char* newname);
 void sserial_set_devname(const char* devname);
 char sserial_send_request_wait_response(unsigned char portindex, int wait_ms );
+long sserial_last_two_bytes_devguid();
 
+unsigned char int_to_byte(int val);
 unsigned char int_to_low_byte(int val);
 unsigned char int_to_high_byte(int val);
+
+
 #endif /* BWL_GAPUART_H_ */
-
-
 
 #include "bwl_simplserial_ext.h"
 

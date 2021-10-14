@@ -1,9 +1,12 @@
 #define F_CPU 12000000UL
 #define BAUD 9600
-#define DEV_NAME "BwlMtrCntFour-1.1"
+#define DEV_NAME "BwlMtrCntFour-1.2"
 #include "libs/bwl_adc.h"
+#include "libs/bwl_pins.h"
 #include "libs/bwl_uart.h"
 #include "libs/bwl_simplserial.h"
+#include "libs/bwl_dht22.h"
+#include "libs/bwl_ds18b20.h"
 #include "pwm.h"
 #define ADC_DEFAULTS ADC_ADJUST_RIGHT, ADC_REFS_INTERNAL_2_56, ADC_PRESCALER_128
 
@@ -20,6 +23,75 @@
 	
 long time_to_stop=0;
 #define TIME_TO_STOP 1
+
+#define AUX1 A,0
+#define AUX2 A,1
+#define AUX3 A,2
+#define AUX4 A,3
+
+#define AUX5 A,4
+#define AUX6 A,5
+#define AUX7 C,7
+
+void ds18b20_delay_2us()
+{
+	_delay_us(2);
+}
+
+void ds18b20_delay_60us()
+{
+	_delay_us(60);
+}
+
+void ds18b20_delay_750ms()
+{
+	_delay_ms(750);
+}
+
+void ds18b20_pin_set(char index, char isOutput, char isHigh)
+{
+	switch (index)
+	{
+		case 1:		pin_set_dir(AUX1,isOutput);	pin_set_out(AUX1,isHigh);		break;
+		case 2:		pin_set_dir(AUX2,isOutput);	pin_set_out(AUX2,isHigh);		break;
+		case 3:		pin_set_dir(AUX3,isOutput);	pin_set_out(AUX3,isHigh);		break;
+		case 4:		pin_set_dir(AUX4,isOutput);	pin_set_out(AUX4,isHigh);		break;
+		case 5:		pin_set_dir(AUX5,isOutput);	pin_set_out(AUX5,isHigh);		break;
+	}
+}
+
+char ds18b20_pin_read(char index)
+{
+	switch (index)
+	{
+		case 1:			return pin_get_in(AUX1);		break;
+		case 2:			return pin_get_in(AUX2);		break;
+		case 3:			return pin_get_in(AUX3);		break;
+		case 4:			return pin_get_in(AUX4);		break;
+		case 5:			return pin_get_in(AUX5);		break;
+	}
+	return 0;
+}
+
+void dht22_pin_set(char index, char isOutput, char isHigh)
+{
+	ds18b20_pin_set (index,isOutput,isHigh);
+}
+
+char dht22_pin_read(char index)
+{
+	return dht22_pin_read (index);
+}
+
+void dht22_delay_2us()
+{
+	_delay_us(2);
+}
+void dht22_delay_
+1100us()
+{
+	_delay_us(1100);
+}
 
 void timer1_set(double timerMksec, double freqMHz, byte enable_interrupt)
 {
@@ -97,13 +169,29 @@ void sserial_process_request(unsigned char portindex)
 	if (sserial_request.command==99)
 	{
 		byte adc_chan=sserial_request.data[0];
-		byte adc_avg=sserial_request.data[0];
+		byte adc_avg=sserial_request.data[1];
 		adc_init(adc_chan,ADC_DEFAULTS);
 		int val=adc_read_average(adc_avg)*2.4;
 		sserial_response.result=sserial_request.command+128;
 		sserial_response.data[0]=val>>8;
 		sserial_response.data[1]=val&0xFF;
 		sserial_response.datalength=2;
+		sserial_send_response();
+	}
+	if (sserial_request.command==111)
+	{
+		byte sensortype=sserial_request.data[0];
+		byte sensorchannel=sserial_request.data[1];
+		int val1=0;
+		int val2=0;
+		if (sensortype==1) {val1=ds18b20_get_temperature_fixed_async(sensorchannel);}
+		if (sensortype==2) {dht22_read_fixed(sensorchannel,&val1,&val2);}
+		sserial_response.result=sserial_request.command+128;
+		sserial_response.data[0]=val1>>8;
+		sserial_response.data[1]=val1&0xFF;
+		sserial_response.data[2]=val2>>8;
+		sserial_response.data[3]=val2&0xFF;
+		sserial_response.datalength=4;
 		sserial_send_response();
 	}
 }

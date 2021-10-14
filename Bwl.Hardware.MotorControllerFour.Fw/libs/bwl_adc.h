@@ -45,6 +45,7 @@ int adc_read_average(int count);
 #define ADC_MUX_ADCDIFF_11_10_X10 13
 #define ADC_MUX_ADCDIFF_11_10_X200 15
 
+#define ADC_MUX_1_1V 30
 /*
 #define ADC_MUX_ADC_TEMP 8
 #define ADC_MUX_1_1V 14

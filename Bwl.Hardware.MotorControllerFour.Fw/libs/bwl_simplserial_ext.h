@@ -16,7 +16,7 @@
 #define GOTO_BOOT 	asm volatile("jmp 0x7000"::);
 #endif
 
-#if defined(__AVR_ATmega324PA__) || defined(__AVR_ATmega324P__) || defined(__AVR_ATmega324A__)
+#if defined(__AVR_ATmega324PA__) || defined(__AVR_ATmega324P__) || defined(__AVR_ATmega324A__)|| defined(__AVR_ATmega324PB__)
 #define GOTO_PROG 	asm volatile("jmp 0x0000"::);
 #define GOTO_BOOT 	asm volatile("jmp 0x7000"::);
 #endif
@@ -24,4 +24,9 @@
 #if defined(__AVR_ATmega2560__)
 #define GOTO_PROG 	asm volatile("jmp 0x00000"::);
 #define GOTO_BOOT 	asm volatile("jmp 0x3F000"::);
+#endif
+
+#if defined(__AVR_ATmega640__)
+#define GOTO_PROG 	asm volatile("jmp 0x00000"::);
+#define GOTO_BOOT 	asm volatile("jmp 0xF000"::);
 #endif
