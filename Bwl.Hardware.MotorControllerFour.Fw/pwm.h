@@ -19,6 +19,7 @@ void pwm_set_out(byte channel, byte state);
 //can net used
 void pwm_set(byte channel, byte value);
 void servo_set(byte channel, byte value);
+void servo_disable(byte channel);
 void pwm();
 void servo();
 

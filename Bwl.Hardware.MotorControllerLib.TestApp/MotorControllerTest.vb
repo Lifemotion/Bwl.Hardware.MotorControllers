@@ -67,4 +67,14 @@ Public Class MotorControllerTest
             _logger.AddError(ex.Message)
         End Try
     End Sub
+
+    Private Sub mc4getSens_Click(sender As Object, e As EventArgs) Handles mc4getSens.Click
+        Try
+            mc4adcResult.Text = ""
+            Dim result = _mc4.GetExternalSensor(Val(mc4snsType.Text), Val(mc4adcChan.Text))
+            mc4senRes.Text = result(0).ToString("0.000") + " " + result(1).ToString("0.000")
+        Catch ex As Exception
+            _logger.AddError(ex.Message)
+        End Try
+    End Sub
 End Class

@@ -51,10 +51,13 @@
     End Function
 
     Public Function GetExternalSensor(sensorType As Integer, aux As Integer) As Integer()
+        SS.RequestTimeout = 2000
         Dim response = SS.Request(0, 111, {CByte(sensorType), CByte(aux)})
         If response.ResponseState = SimplSerial.ResponseState.ok Then
-            Dim result1 = (CInt(response.Data(0)) * 256 + CInt(response.Data(1))) / 1000.0
-            Dim result2 = (CInt(response.Data(2)) * 256 + CInt(response.Data(3))) / 1000.0
+            'Dim result1 = (CInt(response.Data(0)) * 256 + CInt(response.Data(1))) / 1000.0
+            Dim result1 = BitConverter.ToInt16(response.Data, 0)
+            Dim result2 = BitConverter.ToInt16(response.Data, 2)
+            'Dim result2 = (CInt(response.Data(2)) * 256 + CInt(response.Data(3))) / 1000.0
             Return {result1, result2}
         Else
             Throw New Exception(response.ToString)
@@ -66,7 +69,7 @@
         Return res
     End Function
     Public Function GetExternalDHT22(aux As Integer) As Single()
-        Dim val = GetExternalSensor(1, aux)
+        Dim val = GetExternalSensor(2, aux)
         Dim temp = val(0) / 10.0
         Dim huni = val(1) / 10.0
         Return {temp, huni}

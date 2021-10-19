@@ -73,6 +73,17 @@ char ds18b20_pin_read(char index)
 	return 0;
 }
 
+void servo_disable1(char sensorchannel)
+{
+	switch (sensorchannel)
+	{
+		case 1:			servo_disable(0);		break;
+		case 2:			servo_disable(1);		break;
+		case 3:			servo_disable(2);		break;
+		case 4:			servo_disable(3);		break;
+	}
+}
+
 void dht22_pin_set(char index, char isOutput, char isHigh)
 {
 	ds18b20_pin_set (index,isOutput,isHigh);
@@ -80,15 +91,14 @@ void dht22_pin_set(char index, char isOutput, char isHigh)
 
 char dht22_pin_read(char index)
 {
-	return dht22_pin_read (index);
+	return ds18b20_pin_read(index);
 }
 
 void dht22_delay_2us()
 {
 	_delay_us(2);
 }
-void dht22_delay_
-1100us()
+void dht22_delay_1100us()
 {
 	_delay_us(1100);
 }
@@ -113,7 +123,7 @@ ISR(TIMER1_COMPA_vect)
 		time_to_stop--;
 		servo();
 		pwm();
-		if (time_to_stop==0)
+		/*if (time_to_stop==0)
 		{
 				for (byte i=0; i<255; i++)
 				{
@@ -122,7 +132,7 @@ ISR(TIMER1_COMPA_vect)
 					pwm_set(i,0);
 					servo_set(i,0);
 				}
-		}
+		}*/
 	}
 }
 
@@ -184,13 +194,16 @@ void sserial_process_request(unsigned char portindex)
 		byte sensorchannel=sserial_request.data[1];
 		int val1=0;
 		int val2=0;
+		servo_disable1(sensorchannel);
+		cli();
 		if (sensortype==1) {val1=ds18b20_get_temperature_fixed_async(sensorchannel);}
 		if (sensortype==2) {dht22_read_fixed(sensorchannel,&val1,&val2);}
+		sei();
 		sserial_response.result=sserial_request.command+128;
-		sserial_response.data[0]=val1>>8;
-		sserial_response.data[1]=val1&0xFF;
-		sserial_response.data[2]=val2>>8;
-		sserial_response.data[3]=val2&0xFF;
+		sserial_response.data[1]=val1>>8;
+		sserial_response.data[0]=val1&0xFF;
+		sserial_response.data[3]=val2>>8;
+		sserial_response.data[2]=val2&0xFF;
 		sserial_response.datalength=4;
 		sserial_send_response();
 	}
@@ -198,6 +211,7 @@ void sserial_process_request(unsigned char portindex)
 
 void servo_set_out(byte channel, byte state)
 {
+	return;
 	setbit(DDRA,0,1);
 	setbit(DDRA,1,1);
 	setbit(DDRA,2,1);

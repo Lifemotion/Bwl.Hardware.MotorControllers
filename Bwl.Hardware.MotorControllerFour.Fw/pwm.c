@@ -20,10 +20,18 @@ void pwm_set(byte channel, byte value)
 void servo_set(byte channel, byte value)
 {
 	float val=(float) value/100.0 * (float)(SERVO_END-SERVO_START)+SERVO_START;
-	if (channel<PWM_CHANNELS) 
+	if (channel<SERVO_CHANNELS) 
 	{
 		servo_next_values[channel]=(uint16_t)val;
 		if (value==255) servo_next_values[channel]=0;
+	}
+}
+
+void servo_disable(byte channel)
+{
+	if (channel<SERVO_CHANNELS)
+	{
+		servo_next_values[channel]=0;
 	}
 }
 
@@ -41,7 +49,7 @@ void pwm()
 	
 	for (byte i=0; i<PWM_CHANNELS; i++)
 	{
-		if (pwm_values[i]==pwm_counter)		pwm_set_out(i,0);
+		if ((pwm_values[i]==pwm_counter)&&(pwm_values[i]>0))		pwm_set_out(i,0);
 	}
 	pwm_counter++;
 }
@@ -60,7 +68,7 @@ void servo()
 	
 	for (byte i=0; i<SERVO_CHANNELS; i++)
 	{
-		if (servo_values[i]==servo_counter)		servo_set_out(i,0);
+		if ((servo_values[i]==servo_counter)&&(servo_values[i]>0))		servo_set_out(i,0);
 	}
 	servo_counter++;
 }
