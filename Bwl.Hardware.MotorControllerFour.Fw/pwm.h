@@ -2,7 +2,7 @@
 #define PWM_H_
 
 #define PWM_CHANNELS 4
-#define PWM_TOP 50
+#define PWM_TOP 20
 
 #define SERVO_CHANNELS 4
 #define SERVO_TOP	 400

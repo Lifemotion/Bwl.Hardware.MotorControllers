@@ -8,6 +8,7 @@
 #include "libs/bwl_dht22.h"
 #include "libs/bwl_ds18b20.h"
 #include "pwm.h"
+#include "sensors.h"
 #define ADC_DEFAULTS ADC_ADJUST_RIGHT, ADC_REFS_INTERNAL_2_56, ADC_PRESCALER_128
 
 #include <avr/io.h>
@@ -24,55 +25,6 @@
 long time_to_stop=0;
 #define TIME_TO_STOP 1
 
-#define AUX1 A,0
-#define AUX2 A,1
-#define AUX3 A,2
-#define AUX4 A,3
-
-#define AUX5 A,4
-#define AUX6 A,5
-#define AUX7 C,7
-
-void ds18b20_delay_2us()
-{
-	_delay_us(2);
-}
-
-void ds18b20_delay_60us()
-{
-	_delay_us(60);
-}
-
-void ds18b20_delay_750ms()
-{
-	_delay_ms(750);
-}
-
-void ds18b20_pin_set(char index, char isOutput, char isHigh)
-{
-	switch (index)
-	{
-		case 1:		pin_set_dir(AUX1,isOutput);	pin_set_out(AUX1,isHigh);		break;
-		case 2:		pin_set_dir(AUX2,isOutput);	pin_set_out(AUX2,isHigh);		break;
-		case 3:		pin_set_dir(AUX3,isOutput);	pin_set_out(AUX3,isHigh);		break;
-		case 4:		pin_set_dir(AUX4,isOutput);	pin_set_out(AUX4,isHigh);		break;
-		case 5:		pin_set_dir(AUX5,isOutput);	pin_set_out(AUX5,isHigh);		break;
-	}
-}
-
-char ds18b20_pin_read(char index)
-{
-	switch (index)
-	{
-		case 1:			return pin_get_in(AUX1);		break;
-		case 2:			return pin_get_in(AUX2);		break;
-		case 3:			return pin_get_in(AUX3);		break;
-		case 4:			return pin_get_in(AUX4);		break;
-		case 5:			return pin_get_in(AUX5);		break;
-	}
-	return 0;
-}
-
 void servo_disable1(char sensorchannel)
 {
 	switch (sensorchannel)
@@ -82,25 +34,6 @@ void servo_disable1(char sensorchannel)
 		case 3:			servo_disable(2);		break;
 		case 4:			servo_disable(3);		break;
 	}
-}
-
-void dht22_pin_set(char index, char isOutput, char isHigh)
-{
-	ds18b20_pin_set (index,isOutput,isHigh);
-}
-
-char dht22_pin_read(char index)
-{
-	return ds18b20_pin_read(index);
-}
-
-void dht22_delay_2us()
-{
-	_delay_us(2);
-}
-void dht22_delay_1100us()
-{
-	_delay_us(1100);
 }
 
 void timer1_set(double timerMksec, double freqMHz, byte enable_interrupt)
@@ -116,13 +49,21 @@ void timer1_set(double timerMksec, double freqMHz, byte enable_interrupt)
 	}
 }
 
+byte timer_state=0;
+
 ISR(TIMER1_COMPA_vect)
 {
+	if ((timer_state++) == 2) {timer_state=0;}
+	if (timer_state==0)
+	{
+		servo();
+	}
+	pwm();
+	
 	if (time_to_stop>0)
 	{
 		time_to_stop--;
-		servo();
-		pwm();
+		
 		/*if (time_to_stop==0)
 		{
 				for (byte i=0; i<255; i++)
@@ -136,6 +77,13 @@ ISR(TIMER1_COMPA_vect)
 	}
 }
 
+void ds18b20_delay_2us()	{_delay_us(2);}
+void ds18b20_delay_60us()	{_delay_us(60);}
+void ds18b20_delay_750ms()	{_delay_ms(750);}
+
+void dht22_delay_2us()		{_delay_us(2);}
+void dht22_delay_1100us()	{_delay_us(1100);}
+	
 void var_delay_ms(int ms)
 {
 	for (int i=0; i<ms; i++)_delay_ms(1.0);
@@ -253,14 +201,12 @@ void select_pwm_driver(byte channel)
 	setbit(PORTB,2,0);
 	setbit(PORTB,3,0);
 	setbit(PORTC,6,0);	
-	switch (channel)
-	{
-		case 1:	setbit (PORTB,0,1);break;
-		case 2:	setbit (PORTB,1,1);break;
-		case 3:	setbit (PORTB,2,1);break;
-		case 4:	setbit (PORTB,3,1);break;
-		case 5:	setbit (PORTC,6,1);break;
-	}
+	
+	if (channel & 1)  {setbit (PORTB,0,1);}
+	if (channel & 2)  {setbit (PORTB,1,1);}
+	if (channel & 4)  {setbit (PORTB,2,1);}
+	if (channel & 8)  {setbit (PORTB,3,1);}
+	if (channel & 16) {setbit (PORTC,6,1);}
 }
 
 int main(void)
@@ -272,8 +218,8 @@ int main(void)
 	sserial_append_devname(27,8,__TIME__);
 	uart_init_withdivider(0,UBRR_VALUE);
 	uart_init_withdivider(1,UBRR_VALUE);
-	select_pwm_driver(255);
-	timer1_set(20000,12.0,1);
+	select_pwm_driver(0);
+	timer1_set(10000,12.0,1);
 	sei();
     while (1) 
     {

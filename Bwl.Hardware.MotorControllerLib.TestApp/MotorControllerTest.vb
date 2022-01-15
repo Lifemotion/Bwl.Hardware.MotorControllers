@@ -35,11 +35,11 @@ Public Class MotorControllerTest
         If _mc4.IsConnected Then
             _mc4.MotorAB = mc4pwmAB.Value
             _mc4.MotorCD = mc4pwmCD.Value
-            If mc4ch1.Checked Then _mc4.MotorDriver = 1
-            If mc4ch2.Checked Then _mc4.MotorDriver = 2
-            If mc4ch3.Checked Then _mc4.MotorDriver = 3
-            If mc4ch4.Checked Then _mc4.MotorDriver = 4
-            If mc4ch5.Checked Then _mc4.MotorDriver = 5
+            If mc4ch1.Checked Then _mc4.MotorDrivers = 1
+            If mc4ch2.Checked Then _mc4.MotorDrivers = 2
+            If mc4ch3.Checked Then _mc4.MotorDrivers = 4
+            If mc4ch4.Checked Then _mc4.MotorDrivers = 8
+            If mc4ch5.Checked Then _mc4.MotorDrivers = 16
             _mc4.Servo1 = mc4servo1.Value
             _mc4.Servo2 = mc4servo2.Value
             _mc4.Servo3 = mc4servo3.Value

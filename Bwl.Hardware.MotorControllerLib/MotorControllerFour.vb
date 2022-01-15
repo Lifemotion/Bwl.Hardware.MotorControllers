@@ -8,10 +8,17 @@
         End Function
     End Class
 
+    Public Enum MotorDriver As Byte
+        Driver1 = 1
+        Driver2 = 2
+        Driver3 = 4
+        Driver4 = 8
+        Driver5 = 16
+    End Enum
 
     Public Property MotorAB As Integer = 0
     Public Property MotorCD As Integer = 0
-    Public Property MotorDriver As Integer = 255
+    Public Property MotorDrivers As MotorDriver = 0
 
     Public Property Servo1 As Integer = 50
     Public Property Servo2 As Integer = 50
@@ -77,7 +84,7 @@
     Public Sub SendValues()
         Static lastMotorAB As Integer
         Static lastMotorCD As Integer
-        Static lastMotorDriver As Integer
+        Static lastMotorDriver As Byte
         Static lastServo1 As Integer
         Static lastServo2 As Integer
         Static lastServo3 As Integer
@@ -87,7 +94,7 @@
 
         If lastMotorAB <> MotorAB Then
             If MotorAB < 0 Then
-                data.AddRange({10, 0, 0, 10, 1, FitTo100(-MotorAB)})
+                data.AddRange({10, 0, 0, 10, 1, FitTo100(100 + MotorAB)})
             Else
                 data.AddRange({10, 0, 100, 10, 1, FitTo100(100 - MotorAB)})
             End If
@@ -95,26 +102,29 @@
 
         If lastMotorCD <> MotorCD Then
             If MotorCD < 0 Then
-                data.AddRange({10, 2, 0, 10, 3, FitTo100(-MotorCD)})
+                data.AddRange({10, 2, 0, 10, 3, FitTo100(100 + MotorCD)})
             Else
                 data.AddRange({10, 2, 100, 10, 3, FitTo100(100 - MotorCD)})
             End If
         End If
 
-        If lastMotorDriver <> MotorDriver Then data.AddRange({30, FitTo100(MotorDriver), 0})
+        If lastMotorDriver <> MotorDrivers Then data.AddRange({30, MotorDrivers, 0})
 
         If lastServo1 <> Servo1 Then data.AddRange({20, 1, FitTo100(Servo1)})
         If lastServo2 <> Servo2 Then data.AddRange({20, 2, FitTo100(Servo2)})
         If lastServo3 <> Servo3 Then data.AddRange({20, 3, FitTo100(Servo3)})
         If lastServo4 <> Servo4 Then data.AddRange({20, 4, FitTo100(Servo4)})
 
-        If data.Count = 0 Then data.AddRange({0, 0, 0})
+        If data.Count = 0 Then
+            data.AddRange({0, 0, 0})
+        Else
+        End If
 
         If SS.IsConnected Then
             SS.Send(New SimplSerial.SSRequest(0, 77, data.ToArray))
             lastMotorAB = MotorAB
             lastMotorCD = MotorCD
-            lastMotorDriver = MotorDriver
+            lastMotorDriver = MotorDrivers
             lastServo1 = Servo1
             lastServo2 = Servo2
             lastServo3 = Servo3
